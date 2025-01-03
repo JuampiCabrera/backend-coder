@@ -14,9 +14,26 @@ router.get("/", async (req, res) => {
     }
 });
 
+const midd1 = function (req, res, next){
+    req.username = 'juampi'
+    next()
+}
+router.get('/', midd1, (req, res) => {
+    console.log(req.username);
+    
+    res.send(req.username)
+})
+const authentication = (req, res, next) => {
+    if(req.username != 'juampi') return res.send('usuario no identificado')
+    next()
+}
+router.post('/', authentication, (req, res)=> {
+    res.send('create products')
+})
+
 router.get('/api/products/:pid', (req,res) => {
     const productId = req.params.pid
-    const producto = products.find(prod => prod.id === productId)
+    const producto = productId.find(prod => prod.id === productId)
 
     if(producto){
         res.status(200).send(producto)
@@ -44,13 +61,13 @@ router.put('/api/products/:pid', (req,res) => {
     const productId = req.params.pid
     let {nombre, marca, precio, stock} = req.body
 
-    const indice  = products.findIndex(prod => prod.id === productId)
+    const indice  = productId.findIndex(prod => prod.id === productId)
 
     if(indice != -1){
-        products[indice].nombre = nombre
-        products[indice].marca = marca
-        products[indice].precio = precio
-        products[indice].stock = stock
+        productId[indice].nombre = nombre
+        productId[indice].marca = marca
+        productId[indice].precio = precio
+        productId[indice].stock = stock
         res.status(200).send("producto actualizado correctamente")
     }else {
         res.status(404).send('el producto no existe')

@@ -6,13 +6,13 @@ const router = Router()
 const cart = []
 
 
-router.get('/api/cart', (req,res) => {
+router.get('/', (req,res) => {
 
     res.status(200).send(cart)
     
     })
 
-router.get('/api/cart/:pid', (req,res) => {
+router.get('/api/cart/:cid', (req,res) => {
     const itemId = req.params.pid
     const item = cart.find(item => item.id === itemId)
 
@@ -28,7 +28,7 @@ router.post('/api/cart', (req, res)=> {
     res.status(201).send(`Producto creado: `)
 })
 
-router.put('/api/cast/:pid', (req,res) => {
+router.put('/api/cast/:cid', (req,res) => {
     const productId = req.params.pid
     let {nombre, marca, precio, stock} = req.body
 
