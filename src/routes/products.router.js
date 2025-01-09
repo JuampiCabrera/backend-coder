@@ -1,5 +1,5 @@
-import express from 'express'
 import { Router } from "express"
+import {prodManager} from "../managers/product.manager.js"
 
 
 const router = Router()
@@ -14,11 +14,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-const midd1 = function (req, res, next){
-    req.username = 'juampi'
-    next()
-}
-router.get('/', midd1, (req, res) => {
+router.get('/', (req, res) => {
     console.log(req.username);
     
     res.send(req.username)

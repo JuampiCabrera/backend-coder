@@ -22,7 +22,8 @@ router.get('/', (req, res) => {
         products,
         isAdmin: user.role === 'admin',
         hayProductos: products.length != 0,
-        titlePage: 'HOME'
+        titlePage: 'HOME',
+        style: 'style.css'
     })
 })
 
