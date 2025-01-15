@@ -1,5 +1,5 @@
 import { Router } from "express"
-import {prodManager} from "../managers/product.manager.js"
+import ProductManager from "../managers/product.manager.js";
 
 
 const router = Router()
@@ -7,7 +7,7 @@ const router = Router()
 
 router.get("/", async (req, res) => {
     try {
-        const prods = await prodManager.getAll();
+        const prods = await ProductManager.getAll();
         res.status(200).json(prods);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
     try {
-        const prods = await prodManager.getById();
+        const prods = await ProductManager.getById();
         res.status(200).json(prods);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -25,8 +25,8 @@ router.get("/", async (req, res) => {
 
 router.post('/', async (req,res)=>{
     const newProduct = req.body
-    await prodManager.create(newProduct)
-    const productsList = await prodManager.getAll()
+    await ProductManager.create(newProduct)
+    const productsList = await ProductManager.getAll()
     socketServer.emit('realtime', productsList)
     res.status(201).json(newProduct)
 
@@ -35,16 +35,16 @@ router.post('/', async (req,res)=>{
 router.put('/:pid', async (req,res)=>{
     const id = req.params.pid
     const newProduct = req.body
-    await prodManager.update(newProduct,id)
-    const productsList = await prodManager.getAll()
+    await ProductManager.update(newProduct,id)
+    const productsList = await ProductManager.getAll()
     socketServer.emit('realtime', productsList)
     res.status(201).json(newProduct)
 })
 
 router.delete('/:pid', async (req,res)=>{
     const id = req.params.pid
-    await prodManager.delete(id)
-    const productsList = await prodManager.getAllProducts()
+    await ProductManager.delete(id)
+    const productsList = await ProductManager.getAll()
     socketServer.emit('realtime', productsList)
     res.status(201).json({"mensaje": `Producto eliminado. id: ${id}'`})
 })

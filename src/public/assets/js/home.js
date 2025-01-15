@@ -3,7 +3,7 @@ const socket = io()
 
 const contenedorProductos = document.querySelector('.products-container')
 
-socket.on('index', (data)=>{
+socket.on('home', (data)=>{
     contenedorProductos.innerHTML = ''
     data.forEach(product => {
         const div = document.createElement('div')
