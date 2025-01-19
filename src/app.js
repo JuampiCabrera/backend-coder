@@ -3,11 +3,11 @@ import productsRouter from './routes/products.router.js'
 import cartRouter from './routes/cart.router.js'
 import viewsRouter from './routes/views.router.js'
 import realTimeProducts from './routes/realTimeProducts.js'
-import logger from 'morgan'
 import { __dirname } from './utils.js'
 import  handlebars  from 'express-handlebars'
 import { Server } from 'socket.io'
 import ProductManager from './managers/product.manager.js'
+
 
 
 const app = express() 
@@ -16,7 +16,6 @@ const productManager = new ProductManager(__dirname + '/data/products.json');
 app.use(express.json()) 
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(__dirname + '/public'))
-app.use(logger('dev'))
 
 //configuracion motor de plantilla 
 
@@ -33,26 +32,25 @@ app.use('/realtimeproducts', realTimeProducts)
 const PORT = 8080
 const httpServer = app.listen(PORT, () =>{
     console.log("server on port ", PORT);
-    
 })
 
 export const socketServer = new Server(httpServer)
 
 socketServer.on('connection', async (socket)=>{
     console.log(`Nuev.Disp.Conect. ID: ${socket.id}`)
-    const productsList = await productManager.getAll()
+    const productsList = await productManager.getAllProducts()
     socket.emit('home', productsList)
     socket.emit('realtime', productsList)
     socket.on('nuevo-producto', async(producto)=>{
-        await productManager.create(producto)
+        await productManager.addProduct(producto)
         socketServer.emit('realtime', productsList) 
     })
     socket.on('update-producto', async (producto)=>{
-        await productManager.update(producto, producto.id)
+        await productManager.updateProduct(producto, producto.id)
         socketServer.emit('realtime',productsList)
     })
     socket.on('delete-product', async(id) => {
-        await productManager.delete(id)
+        await productManager.deleteProduct(id)
         socketServer.emit('realtime', productsList)
     })
 })

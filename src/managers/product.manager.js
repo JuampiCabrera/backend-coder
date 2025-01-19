@@ -10,7 +10,7 @@ class ProductManager {
         this.productsList = []
     }
 
-    async getAll() {
+    async getAllProducts() {
         try {
             if (fs.existsSync(this.path)) {
             const list = await fs.promises.readFile(this.path, "utf-8");
@@ -22,9 +22,9 @@ class ProductManager {
         }
     }
 
-    async getById(id) {
+    async getProduct(id) {
         try {
-            const products = await this.getAll();
+            const products = await this.getAllProducts();
             const product = products.find((product) => product.id === id);
             if (!product) throw new Error("product not found");
             return product;
@@ -33,7 +33,7 @@ class ProductManager {
         }
     }
 
-    async create(product) {
+    async addProduct(product) {
         await this.getAllProducts();
         let newProduct = {
             "id": uuidv4,
@@ -56,8 +56,8 @@ class ProductManager {
         await fs.promises.writeFile(this.path,JSON.stringify({ products: this.productsList }))
     }
 
-    async update(product, id) {
-        await this.getAll();
+    async updateProduct(product, id) {
+        await this.getAllProducts();
         if (this.productsList.some(obj => obj.id == id)) {
             const prod = this.productsList.find(obj => obj.id == id)
             product.title ? prod.title = product.title : null
@@ -75,8 +75,8 @@ class ProductManager {
         }
     }
 
-    async delete(id){
-        await this.getAll();
+    async deleteProduct(id){
+        await this.getAllProducts();
         if (this.productsList.some(obj => obj.id == id)) {
             const i = this.productsList.findIndex(obj => obj.id == id)
             this.productsList.splice(i,1)
@@ -87,9 +87,9 @@ class ProductManager {
         }
     }
 
-    async deleteAll() {
+    async deleteAllProducts() {
         try {
-            const products = await this.getAll();
+            const products = await this.getAllProducts();
             if (!products.length > 0) throw new Error("No existen productos");
             await fs.promises.unlink(this.path);
         } catch (error) {
