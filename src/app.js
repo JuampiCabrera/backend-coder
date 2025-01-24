@@ -2,10 +2,10 @@ import express from 'express'
 import productsRouter from './routes/products.router.js'
 import cartRouter from './routes/cart.router.js'
 import viewsRouter from './routes/views.router.js'
-import realTimeProducts from './routes/realTimeProducts.js'
+import realTimeProducts from './routes/realtimeproducts.router.js'
 import { __dirname } from './utils.js'
 import  handlebars  from 'express-handlebars'
-import { Server } from 'socket.io'
+import  {Server} from 'socket.io'
 import ProductManager from './managers/product.manager.js'
 
 
